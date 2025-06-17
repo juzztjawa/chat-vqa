@@ -1,0 +1,87 @@
+Gtk-Message: 10:42:36.464: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 10:42:36.464: Failed to load module "appmenu-gtk-module"
+[25516:0616/104236.493466:ERROR:object_proxy.cc(576)] Failed to call method: org.freedesktop.DBus.Properties.Get: object_path= /org/freedesktop/portal/desktop: org.freedesktop.DBus.Error.InvalidArgs: No such interface “org.freedesktop.portal.FileChooser”
+[25516:0616/104236.493488:ERROR:select_file_dialog_linux_portal.cc(308)] Failed to read portal version property
+[0616/104236.510811:ERROR:elf_dynamic_array_reader.h(64)] tag not found
+Gtk-Message: 10:42:43.202: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 10:42:43.202: Failed to load module "appmenu-gtk-module"
+[25624:0616/104243.233435:ERROR:object_proxy.cc(576)] Failed to call method: org.freedesktop.DBus.Properties.Get: object_path= /org/freedesktop/portal/desktop: org.freedesktop.DBus.Error.InvalidArgs: No such interface “org.freedesktop.portal.FileChooser”
+[25624:0616/104243.233469:ERROR:select_file_dialog_linux_portal.cc(308)] Failed to read portal version property
+[90m[main 2025-06-16T05:12:43.435Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/1.1.3/ad56665e2a6e31ce0c2678f00d20e01e7cf462cc9fde5caf5ab167d1a21971e1/stable
+[90m[main 2025-06-16T05:12:43.436Z][0m update#setState idle
+[91m[main 2025-06-16T05:12:45.335Z][0m vscode-file: Refused to load resource /tmp/.mount_cursorT6LMmS/usr/share/cursor/resources/app/extensions/theme-seti/icons/seti.woff from vscode-file: protocol (original URL: vscode-file://vscode-app/tmp/.mount_cursorT6LMmS/usr/share/cursor/resources/app/extensions/theme-seti/icons/seti.woff)
+[25624:0616/104248.707971:ERROR:network_service_instance_impl.cc(613)] Network service crashed, restarting service.
+[25624:0616/104248.716374:ERROR:zygote_communication_linux.cc(296)] Failed to send GetTerminationStatus message to zygote
+[90m[main 2025-06-16T05:12:48.719Z][0m Extension host with pid 25863 exited with code: 0, signal: unknown.
+[90m[main 2025-06-16T05:12:48.725Z][0m Extension host with pid 25832 exited with code: 0, signal: unknown.
+[25624:0616/104248.725935:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.726466:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.726850:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.727197:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.727567:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.728285:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.728962:ERROR:zygote_communication_linux.cc(296)] Failed to send GetTerminationStatus message to zygote
+[91m[main 2025-06-16T05:12:48.729Z][0m CodeWindow: renderer process gone (reason: clean-exit, code: <unknown>)
+[25624:0616/104248.760539:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+Error sending from webFrameMain:  Error: Render frame was disposed before WebFrameMain could be accessed
+    at s.send (node:electron/js2c/browser_init:2:93065)
+    at _.send (node:electron/js2c/browser_init:2:76113)
+    at Wb.send (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:35:23599)
+    at Bp.p (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12964)
+    at Bp.o (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12929)
+    at Bp.m (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12791)
+    at s.then.Error.m.id (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:13718)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[25624:0616/104248.765530:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+Error sending from webFrameMain:  Error: Render frame was disposed before WebFrameMain could be accessed
+    at s.send (node:electron/js2c/browser_init:2:93065)
+    at _.send (node:electron/js2c/browser_init:2:76113)
+    at Wb.send (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:35:23599)
+    at Bp.p (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12964)
+    at Bp.o (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12929)
+    at Bp.m (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:33:12791)
+    at Aa.value (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:34:265)
+    at $.B (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2373)
+    at $.fire (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2591)
+    at file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:30:6500
+    at Aa.value (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:30:5273)
+    at $.B (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2373)
+    at $.C (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2443)
+    at $.fire (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2660)
+    at Aa.value (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:30:5132)
+    at $.B (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2373)
+    at $.fire (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:32:2591)
+    at App.U (file:///tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/out/main.js:30:7419)
+    at App.emit (node:events:536:35)
+    at BrowserWindow.<anonymous> (node:electron/js2c/browser_init:2:12666)
+    at BrowserWindow.emit (node:events:524:28)
+    at BrowserWindow.callbackTrampoline (node:internal/async_hooks:130:17)
+[25624:0616/104248.768037:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[25624:0616/104248.768054:FATAL:gpu_data_manager_impl_private.cc(423)] GPU process isn't usable. Goodbye.
+[0616/104248.777108:ERROR:elf_dynamic_array_reader.h(64)] tag not found
+[0616/104248.777448:ERROR:elf_dynamic_array_reader.h(64)] tag not found
+Gtk-Message: 10:42:54.727: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 10:42:54.727: Failed to load module "appmenu-gtk-module"
+[26105:0616/104254.756489:ERROR:object_proxy.cc(576)] Failed to call method: org.freedesktop.DBus.Properties.Get: object_path= /org/freedesktop/portal/desktop: org.freedesktop.DBus.Error.InvalidArgs: No such interface “org.freedesktop.portal.FileChooser”
+[26105:0616/104254.756522:ERROR:select_file_dialog_linux_portal.cc(308)] Failed to read portal version property
+[90m[main 2025-06-16T05:12:54.956Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/1.1.3/ad56665e2a6e31ce0c2678f00d20e01e7cf462cc9fde5caf5ab167d1a21971e1/stable
+[90m[main 2025-06-16T05:12:54.957Z][0m update#setState idle
+[26160:0616/104256.792416:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 1 times!
+[91m[main 2025-06-16T05:12:56.836Z][0m vscode-file: Refused to load resource /tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/extensions/theme-seti/icons/seti.woff from vscode-file: protocol (original URL: vscode-file://vscode-app/tmp/.mount_cursorlgwqic/usr/share/cursor/resources/app/extensions/theme-seti/icons/seti.woff)
+[26160:0616/104259.395532:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 2 times!
+[26160:0616/104301.390062:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 3 times!
+[26105:0616/104307.676884:ERROR:network_service_instance_impl.cc(613)] Network service crashed, restarting service.
+[90m[main 2025-06-16T05:13:07.691Z][0m Extension host with pid 26341 exited with code: 0, signal: unknown.
+[26105:0616/104307.692929:ERROR:zygote_communication_linux.cc(296)] Failed to send GetTerminationStatus message to zygote
+[26105:0616/104307.696339:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.696961:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.697296:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.697639:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.697907:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.698204:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.698541:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.698818:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.699082:ERROR:gpu_process_host.cc(975)] GPU process launch failed: error_code=1002
+[26105:0616/104307.699094:FATAL:gpu_data_manager_impl_private.cc(423)] GPU process isn't usable. Goodbye.
+[0616/104307.706571:ERROR:elf_dynamic_array_reader.h(64)] tag not found
+[0616/104307.707216:ERROR:elf_dynamic_array_reader.h(64)] tag not found

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-gray-100 text-black;
+}
+
+body.dark {
+  @apply bg-gray-900 text-white;
+}
+
+/* body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="file"],
+input[type="text"] {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+} */
