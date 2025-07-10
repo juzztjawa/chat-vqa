@@ -1,23 +1,31 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
-from fastapi import Request
-from pydantic_ai import Agent, BinaryContent
+from fastapi.staticfiles import StaticFiles
+from agno.agent import Agent
+from agno.tools.duckduckgo import DuckDuckGoTools
+from agno.media import Image
+from agno.models.google import Gemini
 from dotenv import load_dotenv
-from typing import List
-import nest_asyncio
+from pathlib import Path
 import os
 import uuid
-import shutil
 import json
+from typing import Optional
+from prompt import extraction_prompt
+from pydantic import BaseModel
 
 # --- Initialization --- #
 load_dotenv()
-nest_asyncio.apply()
 
 app = FastAPI()
 
-# Enable CORS (configure in production)
+# 2. Define a Pydantic model for the request body
+class ChatRequest(BaseModel):
+    question: str
+    enable_search: bool = False
+
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,95 +34,156 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Directories and files
-CHAT_HISTORY = "chat_history.json"
+# Directories
 IMAGE_DIR = "images"
+CHAT_HISTORY = "chat_history.json"
 os.makedirs(IMAGE_DIR, exist_ok=True)
 
-# Gemini Agent
-agent = Agent(model="google-gla:gemini-2.0-flash")
+# Mount static files for image serving
+app.mount("/images", StaticFiles(directory=IMAGE_DIR), name="images")
 
-# --- Endpoints --- #
+# --- Agent Initialization --- #
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+model = Gemini(id="gemini-2.0-flash", api_key=GOOGLE_API_KEY)
 
-@app.get("/messages")
-def get_messages():
+def create_image_agent(model) -> Agent:
+    return Agent(
+        name="image_analysis_agent",
+        model=model,
+        markdown=True,
+    )
+
+def create_chat_agent(model, enable_search: bool = False) -> Agent:
+    tools = [DuckDuckGoTools()] if enable_search else []
+    return Agent(
+        name="image_chat_followup_agent",
+        model=model,
+        tools=tools,
+        read_chat_history=True,
+        add_history_to_messages=True,
+        num_history_responses=5,
+        markdown=True,
+        add_datetime_to_instructions=True,
+    )
+
+# Default extraction prompt
+EXTRACTION_PROMPT = extraction_prompt
+
+# --- Helper Functions --- #
+def load_chat_history():
     if os.path.exists(CHAT_HISTORY):
         with open(CHAT_HISTORY) as f:
             return json.load(f)
-    return []
+    return {"messages": [], "last_extracted_data": None, "last_image_id": None}
 
+def save_chat_history(history):
+    with open(CHAT_HISTORY, "w") as f:
+        json.dump(history, f)
 
-@app.post("/vqa")
-async def vqa_endpoint(question: str = Form(...), image: UploadFile = File(None)):
-    try:
-        history = []
-        if os.path.exists(CHAT_HISTORY):
-            with open(CHAT_HISTORY) as f:
-                history = json.load(f)
+def save_image(file: UploadFile) -> str:
+    ext = Path(file.filename).suffix
+    filename = f"{uuid.uuid4().hex}{ext}"
+    filepath = os.path.join(IMAGE_DIR, filename)
+    with open(filepath, "wb") as f:
+        f.write(file.file.read())
+    return filename
 
-        if image:
-            # Read image bytes
-            image_bytes = await image.read()
+# --- Endpoints --- #
+@app.get("/messages")
+def get_messages():
+    history = load_chat_history()
+    print(history)
+    return history["messages"]
 
-            # Save image
-            ext = os.path.splitext(image.filename)[-1]
-            filename = f"{uuid.uuid4().hex}{ext}"
-            filepath = os.path.join(IMAGE_DIR, filename)
-            with open(filepath, "wb") as f:
-                f.write(image_bytes)
+# --- MODIFIED /process-image ENDPOINT ---
+@app.post("/process-image")
+async def process_image(
+    image: UploadFile = File(...),
+    mode: str = Form("auto"),
+    instruction: Optional[str] = Form(None),
+    enable_search: bool = Form(False)
+):
+    history = load_chat_history()
+    
+    filename = save_image(image)
+    image_path = os.path.join(IMAGE_DIR, filename)
+    
+    image_agent = create_image_agent(model)
+    
+    extraction_instruction = EXTRACTION_PROMPT
+    if mode.lower() in ["manual", "hybrid"] and instruction:
+        extraction_instruction = instruction
+    
+    extracted_data = image_agent.run(extraction_instruction, images=[Image(filepath=image_path)])
+    
+    # Store the important data on the backend
+    history["last_extracted_data"] = extracted_data.content
+    history["last_image_id"] = filename
+    
+    # --- THIS IS THE CRITICAL FIX FOR PERSISTENCE ---
+    # We now save the user action and the AI confirmation to the permanent chat history.
+    # The frontend will now fetch this on reload.
+    confirmation_message = "Image analyzed successfully. You can now ask questions about it."
+    history["messages"].extend([
+        {"role": "user", "content": f"Analyzed: {image.filename}", "image": f"/images/{filename}"},
+        {"role": "assistant", "content": confirmation_message}
+    ])
+    # --- END OF CRITICAL FIX ---
+    
+    save_chat_history(history)
+    
+    # The frontend doesn't need the message content back, it will just re-fetch the whole history
+    # But we can return the updated history directly to save a network call.
+    return {"messages": history["messages"]}
 
-            image_url = f"/images/{filename}"
+# This endpoint already correctly saves to history, so it's good.
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    history = load_chat_history()
+    
+    if not history["last_extracted_data"]:
+        raise HTTPException(status_code=400, detail="No extracted data available. Process an image first.")
+    
+    chat_agent = create_chat_agent(model, request.enable_search)
+    
+    prompt = f"""You are a chat agent who answers followup questions based on extracted image data.
+Understand the requirement properly and then answer the question correctly.
 
-            # Send to Gemini with image
-            result = agent.run_sync([
-                question,
-                BinaryContent(data=image_bytes, media_type=image.content_type)
-            ])
+Extracted Image Data: {history['last_extracted_data']}
 
-            user_msg = {"type": "user", "question": question, "image": image_url}
-            bot_msg = {"type": "bot", "answer": result.output}
-
-            history.extend([user_msg, bot_msg])
-
-            with open(CHAT_HISTORY, "w") as f:
-                json.dump(history, f)
-
-            return {
-                "answer": result.output,
-                "image_url": image_url
-            }
-
-        else:
-            # Text-only message
-            result = agent.run_sync(question)
-
-            user_msg = {"type": "user", "question": question}
-            bot_msg = {"type": "bot", "answer": result.output}
-
-            history.extend([user_msg, bot_msg])
-
-            with open(CHAT_HISTORY, "w") as f:
-                json.dump(history, f)
-
-            return {
-                "answer": result.output,
-                "image_url": None
-            }
-
-    except Exception as e:
-        return {"answer": f"Error: {str(e)}", "image_url": None}
-
+Use the above image insights to answer the following question.
+Answer the following question from the above given extracted image data: {request.question}"""
+    
+    chat_response = chat_agent.run(prompt)
+    
+    history["messages"].extend([
+        {"role": "user", "content": request.question},
+        {"role": "assistant", "content": chat_response.content}
+    ])
+    save_chat_history(history)
+    
+    # Return the full updated message list
+    return {"messages": history["messages"]}
 
 
 @app.get("/images/{filename}")
 def get_image(filename: str):
     return FileResponse(os.path.join(IMAGE_DIR, filename))
 
-
-@app.delete("/messages")
+# --- MODIFIED /clear ENDPOINT ---
+# This endpoint is fine, but we will ensure the frontend handles the state update correctly.
+@app.delete("/clear")
 def clear_chat():
-    if os.path.exists(CHAT_HISTORY):
-        os.remove(CHAT_HISTORY)
-    for f in os.listdir(IMAGE_DIR):
-        os.remove(os.path.join(IMAGE_DIR, f))
-    return {"status": "Chat history cleared"}
+    try:
+        save_chat_history({"messages": [], "last_extracted_data": None, "last_image_id": None})
+        for file in os.listdir(IMAGE_DIR):
+            file_path = os.path.join(IMAGE_DIR, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
+        # Return the new empty state
+        return {"messages": []}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
