@@ -6,9 +6,9 @@ Chats are stored in local. So each new session, the progress will be restored, i
 Clear history clears the entire chat.
 
 Upcoming features:
-Memory - saves above chats for the current prompt.
+~Memory - saves above chats for the current prompt.~
 PostgreSQL - SQL integration for login/signup.
-RAG for research papers - look into more it.
+Internet search - Integrate searching internet as a tool to make the agent based on the news information.
 
 Open two terminals 
 
