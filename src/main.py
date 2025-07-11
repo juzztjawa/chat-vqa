@@ -95,7 +95,7 @@ def get_messages():
     print(history)
     return history["messages"]
 
-# --- MODIFIED /process-image ENDPOINT ---
+
 @app.post("/process-image")
 async def process_image(
     image: UploadFile = File(...),
@@ -120,7 +120,7 @@ async def process_image(
     history["last_extracted_data"] = extracted_data.content
     history["last_image_id"] = filename
     
-    # --- THIS IS THE CRITICAL FIX FOR PERSISTENCE ---
+    
     # We now save the user action and the AI confirmation to the permanent chat history.
     # The frontend will now fetch this on reload.
     confirmation_message = "Image analyzed successfully. You can now ask questions about it."
@@ -128,7 +128,7 @@ async def process_image(
         {"role": "user", "content": f"Analyzed: {image.filename}", "image": f"/images/{filename}"},
         {"role": "assistant", "content": confirmation_message}
     ])
-    # --- END OF CRITICAL FIX ---
+    
     
     save_chat_history(history)
     
@@ -170,8 +170,8 @@ Answer the following question from the above given extracted image data: {reques
 def get_image(filename: str):
     return FileResponse(os.path.join(IMAGE_DIR, filename))
 
-# --- MODIFIED /clear ENDPOINT ---
-# This endpoint is fine, but we will ensure the frontend handles the state update correctly.
+
+
 @app.delete("/clear")
 def clear_chat():
     try:

@@ -157,7 +157,7 @@ export default function ChatVQA() {
           <div ref={chatEndRef} />
         </main>
         
-        {/* --- FIX: Restructured the entire footer --- */}
+        
         <footer className="flex-shrink-0 pt-4 border-t border-gray-700">
           
           {/* Section 1: Image Processing - This is NOT a form */}
@@ -174,7 +174,7 @@ export default function ChatVQA() {
                 </div>
               )}
               <button 
-                type="button" // CRITICAL FIX: Ensures this button does not submit anything
+                type="button" 
                 onClick={processImage} 
                 disabled={!image || loading} 
                 className="px-4 py-2 rounded text-white text-sm bg-green-600 hover:bg-green-700 disabled:bg-gray-500"
